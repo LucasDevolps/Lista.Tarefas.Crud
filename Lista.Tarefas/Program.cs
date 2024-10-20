@@ -2,6 +2,9 @@ using Lista.Tarefas.Data.Repositories;
 using lista.tarefas.dominio.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Lista.Tarefas.Services;
+using Serilog.Sinks.Elasticsearch;
+using Serilog;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +33,21 @@ builder.Services.AddSwaggerGen();
 
 // Adiciona suporte para controllers com views
 builder.Services.AddControllersWithViews();
+
+// Configura o Serilog com o Elasticsearch
+Log.Logger = new LoggerConfiguration()
+    .Enrich.FromLogContext()
+    .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri("http://localhost:9200")) // Altere para a URL do seu Elasticsearch
+    {
+        AutoRegisterTemplate = true,
+        IndexFormat = $"{Assembly.GetExecutingAssembly().GetName().Name.ToLower()}-logs-{DateTime.UtcNow:yyyy-MM}",
+        NumberOfReplicas = 1,
+        NumberOfShards = 2
+    })
+    .CreateLogger();
+
+// Adiciona o Serilog à aplicação
+builder.Host.UseSerilog();
 
 var app = builder.Build();
 

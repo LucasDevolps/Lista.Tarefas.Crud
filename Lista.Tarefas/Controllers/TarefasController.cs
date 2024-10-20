@@ -12,16 +12,18 @@ namespace lista.tarefas.Controllers
     public class TarefasController : Controller
     {
         private readonly ITarefasService _tarefasService;
-
-        public TarefasController(ITarefasService tarefasService)
+        private readonly ILogger<TarefasController> _logger;
+        public TarefasController(ITarefasService tarefasService, ILogger<TarefasController> logger)
         {
             _tarefasService = tarefasService;
+            _logger = logger;
         }
 
         // Exibe a lista de tarefas e retorna uma lista de TarefasResponse
         [HttpGet("")]
         public async Task<IActionResult> Index()
         {
+            _logger.LogInformation("Iniciando recuperação de todas as tarefas.");
             var tarefas = await _tarefasService.ObterTodasTarefasAsync();
 
             var response = tarefas.Select(t => new TarefasResponse
@@ -32,15 +34,15 @@ namespace lista.tarefas.Controllers
                 DataConclusao = t.DataConclusao,
                 Status = t.Status
             });
-
+            _logger.LogInformation("Recuperação de todas as tarefas concluída.");
             return View(response);
         }
 
-        // Método GET para exibir o formulário de criação
         [HttpGet("Criar")]
         public IActionResult Criar()
         {
-            return View();  // Certifique-se de que a View "Criar.cshtml" existe
+            _logger.LogInformation("Exibindo formulário para criação de tarefa.");
+            return View();  
         }
 
         [HttpPost("Criar")]
@@ -50,6 +52,7 @@ namespace lista.tarefas.Controllers
             if (request.DataConclusao <= DateTime.Now)
             {
                 ModelState.AddModelError("DataConclusao", "A data de conclusão deve ser maior que a data atual.");
+                _logger.LogWarning("Tentativa de criar tarefa com data de conclusão inválida.");
             }
 
             if (ModelState.IsValid)
@@ -63,6 +66,7 @@ namespace lista.tarefas.Controllers
                 };
 
                 await _tarefasService.AdicionarTarefaAsync(tarefa);
+                _logger.LogInformation("Nova tarefa criada: {Nome}, com data de conclusão {DataConclusao}.", tarefa.Nome, tarefa.DataConclusao);
 
                 return RedirectToAction("Index");
             }
@@ -110,7 +114,7 @@ namespace lista.tarefas.Controllers
 
                 return RedirectToAction("Index");
             }
-
+            _logger.LogInformation("Exibindo formulário de edição para a tarefa com ID {Id}.", id);
             return View(request);
         }
     }
