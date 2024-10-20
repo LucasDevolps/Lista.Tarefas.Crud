@@ -1,0 +1,39 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model IEnumerable<lista.tarefas.dominio.DTO.Response.TarefasResponse>
+
+<div class="container">
+    <h1 class="mt-4">Lista de Tarefas</h1>
+
+    <a href="/Tarefas/Criar" class="btn btn-primary mb-3">Criar Nova Tarefa</a>
+
+    <table class="table table-striped mt-4">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Descrição</th>
+                <th scope="col">Data de Conclusão</th>
+                <th scope="col">Status</th>
+                <th scope="col">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var tarefa in Model)
+            {
+                <tr>
+                    <th scope="row">@tarefa.Id</th>
+                    <td>@tarefa.Nome</td>
+                    <td>@tarefa.Descricao</td>
+                    <td>@tarefa.DataConclusao.ToString("dd/MM/yyyy")</td>
+                    <td>@(tarefa.Status ? "Concluída" : "Pendente")</td>
+                    <td>
+                        <a href="/Tarefas/Editar/@tarefa.Id" class="btn btn-warning">Editar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

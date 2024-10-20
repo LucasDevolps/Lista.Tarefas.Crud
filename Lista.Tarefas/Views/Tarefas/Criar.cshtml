@@ -1,0 +1,37 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model lista.tarefas.dominio.DTO.Request.TarefasRequest
+
+<div class="container">
+    <h1 class="mt-4">Criar Nova Tarefa</h1>
+
+    <form asp-action="Criar" method="post">
+        <div class="mb-3">
+            <label for="Nome" class="form-label">Nome da Tarefa</label>
+            <input type="text" class="form-control" id="Nome" name="Nome" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="Descricao" class="form-label">Descrição</label>
+            <textarea class="form-control" id="Descricao" name="Descricao" required></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="DataConclusao" class="form-label">Data de Conclusão</label>
+            <input type="date" class="form-control" id="DataConclusao" name="DataConclusao" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="Status" class="form-label">Status</label>
+            <select class="form-control" id="Status" name="Status">
+                <option value="false">Pendente</option>
+                <option value="true">Concluída</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-success">Salvar Tarefa</button>
+        <a href="/Tarefas" class="btn btn-secondary">Voltar</a>
+    </form>
+</div>
