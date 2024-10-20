@@ -19,6 +19,11 @@
         </div>
 
         <div class="mb-3">
+            <label for="DataCriacao" class="form-label">Data de Criação</label>
+            <input type="date" class="form-control" id="DataCriacao" name="DataCriacao" value="@DateTime.Now.ToString("yyyy-MM-dd")" readonly>
+        </div>
+
+        <div class="mb-3">
             <label for="DataConclusao" class="form-label">Data de Conclusão</label>
             <input type="date" class="form-control" id="DataConclusao" name="DataConclusao" required>
         </div>
