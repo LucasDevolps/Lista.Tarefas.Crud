@@ -2,6 +2,7 @@
 using lista.tarefas.dominio.DTO.Response;
 using lista.tarefas.dominio.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using System.Linq;
 using lista.tarefas.dominio.DTO;
@@ -13,6 +14,7 @@ namespace lista.tarefas.Controllers
     {
         private readonly ITarefasService _tarefasService;
         private readonly ILogger<TarefasController> _logger;
+
         public TarefasController(ITarefasService tarefasService, ILogger<TarefasController> logger)
         {
             _tarefasService = tarefasService;
@@ -34,15 +36,17 @@ namespace lista.tarefas.Controllers
                 DataConclusao = t.DataConclusao,
                 Status = t.Status
             });
+
             _logger.LogInformation("Recuperação de todas as tarefas concluída.");
             return View(response);
         }
 
+        // Método GET para exibir o formulário de criação
         [HttpGet("Criar")]
         public IActionResult Criar()
         {
             _logger.LogInformation("Exibindo formulário para criação de tarefa.");
-            return View();  
+            return View();
         }
 
         [HttpPost("Criar")]
@@ -74,15 +78,18 @@ namespace lista.tarefas.Controllers
             return View(request);
         }
 
-
         // Exibe o formulário de edição de uma tarefa
         [HttpGet("Editar/{id}")]
         public async Task<IActionResult> Editar(int id)
         {
+            _logger.LogInformation("Iniciando recuperação da tarefa com ID {Id}.", id);
             var tarefa = await _tarefasService.ObterTarefaPorIdAsync(id);
 
             if (tarefa == null)
+            {
+                _logger.LogWarning("Tarefa com ID {Id} não encontrada.", id);
                 return NotFound();
+            }
 
             var request = new TarefasRequest
             {
@@ -92,6 +99,7 @@ namespace lista.tarefas.Controllers
                 Status = tarefa.Status
             };
 
+            _logger.LogInformation("Exibindo formulário de edição para a tarefa com ID {Id}.", id);
             return View(request);
         }
 
@@ -111,11 +119,31 @@ namespace lista.tarefas.Controllers
                 };
 
                 await _tarefasService.AtualizarTarefaAsync(tarefa);
+                _logger.LogInformation("Tarefa com ID {Id} atualizada: {Nome}.", id, tarefa.Nome);
 
                 return RedirectToAction("Index");
             }
-            _logger.LogInformation("Exibindo formulário de edição para a tarefa com ID {Id}.", id);
+
+            _logger.LogWarning("Tentativa de atualização da tarefa com ID {Id} falhou por dados inválidos.", id);
             return View(request);
+        }
+
+        [HttpGet("Deletar/{id}")]
+        public async Task<IActionResult> Deletar(int id)
+        {
+            _logger.LogInformation("Iniciando exclusão da tarefa com ID {Id}.", id);
+
+            var tarefa = await _tarefasService.ObterTarefaPorIdAsync(id);
+            if (tarefa == null)
+            {
+                _logger.LogWarning("Tentativa de exclusão falhou. Tarefa com ID {Id} não encontrada.", id);
+                return NotFound();
+            }
+
+            await _tarefasService.RemoverTarefaAsync(id);
+            _logger.LogInformation("Tarefa com ID {Id} foi excluída.", id);
+
+            return RedirectToAction("Index");
         }
     }
 }

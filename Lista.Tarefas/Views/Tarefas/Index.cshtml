@@ -1,7 +1,6 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 @model IEnumerable<lista.tarefas.dominio.DTO.Response.TarefasResponse>
 
 <div class="container">
@@ -31,6 +30,7 @@
                     <td>@(tarefa.Status ? "Concluída" : "Pendente")</td>
                     <td>
                         <a href="/Tarefas/Editar/@tarefa.Id" class="btn btn-warning">Editar</a>
+                        <a href="/Tarefas/Deletar/@tarefa.Id" class="btn btn-danger">Deletar</a>
                     </td>
                 </tr>
             }
