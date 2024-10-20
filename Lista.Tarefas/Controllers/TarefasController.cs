@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using System.Linq;
 using lista.tarefas.dominio.DTO;
+using Lista.Tarefas.Queue;
 
 namespace lista.tarefas.Controllers
 {
@@ -14,11 +15,13 @@ namespace lista.tarefas.Controllers
     {
         private readonly ITarefasService _tarefasService;
         private readonly ILogger<TarefasController> _logger;
+        private readonly RabbitMQProducer _rabbitMQProducer;
 
-        public TarefasController(ITarefasService tarefasService, ILogger<TarefasController> logger)
+        public TarefasController(ITarefasService tarefasService, ILogger<TarefasController> logger, RabbitMQProducer rabbitMQProducer)
         {
             _tarefasService = tarefasService;
             _logger = logger;
+            _rabbitMQProducer = rabbitMQProducer;
         }
 
         // Exibe a lista de tarefas e retorna uma lista de TarefasResponse
@@ -72,6 +75,9 @@ namespace lista.tarefas.Controllers
                 await _tarefasService.AdicionarTarefaAsync(tarefa);
                 _logger.LogInformation("Nova tarefa criada: {Nome}, com data de conclusão {DataConclusao}.", tarefa.Nome, tarefa.DataConclusao);
 
+                // Envia mensagem para o RabbitMQ
+                _rabbitMQProducer.SendMessage($"Tarefa criada: {tarefa.Nome}, {tarefa.Descricao}");
+
                 return RedirectToAction("Index");
             }
 
@@ -100,6 +106,8 @@ namespace lista.tarefas.Controllers
             };
 
             _logger.LogInformation("Exibindo formulário de edição para a tarefa com ID {Id}.", id);
+            // Envia mensagem para o RabbitMQ
+            _rabbitMQProducer.SendMessage($"Tarefa Editada: {tarefa.Nome}, {tarefa.Descricao}");
             return View(request);
         }
 
@@ -121,10 +129,14 @@ namespace lista.tarefas.Controllers
                 await _tarefasService.AtualizarTarefaAsync(tarefa);
                 _logger.LogInformation("Tarefa com ID {Id} atualizada: {Nome}.", id, tarefa.Nome);
 
+                // Envia mensagem para o RabbitMQ
+                _rabbitMQProducer.SendMessage($"Tarefa Editada: {tarefa.Nome}, {tarefa.Descricao}");
                 return RedirectToAction("Index");
+
             }
 
             _logger.LogWarning("Tentativa de atualização da tarefa com ID {Id} falhou por dados inválidos.", id);
+
             return View(request);
         }
 
@@ -142,7 +154,9 @@ namespace lista.tarefas.Controllers
 
             await _tarefasService.RemoverTarefaAsync(id);
             _logger.LogInformation("Tarefa com ID {Id} foi excluída.", id);
-
+            
+            // Envia mensagem para o RabbitMQ
+            _rabbitMQProducer.SendMessage($"Tarefa Deletar: {tarefa.Nome}, {tarefa.Descricao}");
             return RedirectToAction("Index");
         }
     }

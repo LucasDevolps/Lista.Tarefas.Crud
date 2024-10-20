@@ -5,6 +5,7 @@ using Lista.Tarefas.Services;
 using Serilog.Sinks.Elasticsearch;
 using Serilog;
 using System.Reflection;
+using Lista.Tarefas.Queue;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +49,11 @@ Log.Logger = new LoggerConfiguration()
 
 // Adiciona o Serilog à aplicação
 builder.Host.UseSerilog();
+
+// Adicionando o RabbitMQProducer como Singleton
+builder.Services.AddSingleton<RabbitMQProducer>(sp =>
+    new RabbitMQProducer("localhost", "filaTarefas", sp.GetRequiredService<ILogger<RabbitMQProducer>>()));
+
 
 var app = builder.Build();
 

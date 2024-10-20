@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Lista.Tarefas.Data\Lista.Tarefas.Data.csproj" />
+    <ProjectReference Include="..\Lista.Tarefas.Queue\Lista.Tarefas.Queue.csproj" />
     <ProjectReference Include="..\Lista.Tarefas.Services\Lista.Tarefas.Services.csproj" />
   </ItemGroup>
 

@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lista.Tarefas", "Lista.Tarefas.csproj", "{89B4680F-C6C4-4B10-A994-E210E6642B43}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lista.Tarefas", "Lista.Tarefas.csproj", "{89B4680F-C6C4-4B10-A994-E210E6642B43}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lista.Tarefas.Data", "..\Lista.Tarefas.Data\Lista.Tarefas.Data.csproj", "{66BBCC30-A95C-4A0D-86C5-57498168E52F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lista.Tarefas.Data", "..\Lista.Tarefas.Data\Lista.Tarefas.Data.csproj", "{66BBCC30-A95C-4A0D-86C5-57498168E52F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lista.tarefas.dominio", "..\lista.tarefas.dominio\lista.tarefas.dominio.csproj", "{38A7B9E0-7A84-41BB-9D7B-DCD1DD2D78A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "lista.tarefas.dominio", "..\lista.tarefas.dominio\lista.tarefas.dominio.csproj", "{38A7B9E0-7A84-41BB-9D7B-DCD1DD2D78A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lista.Tarefas.Services", "..\Lista.Tarefas.Services\Lista.Tarefas.Services.csproj", "{43E9C14F-8112-4486-8F77-B039C3B34C60}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lista.Tarefas.Services", "..\Lista.Tarefas.Services\Lista.Tarefas.Services.csproj", "{43E9C14F-8112-4486-8F77-B039C3B34C60}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lista.Tarefas.Queue", "..\Lista.Tarefas.Queue\Lista.Tarefas.Queue.csproj", "{AE32545A-0D6A-43F7-A71C-DF093F695D9C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{43E9C14F-8112-4486-8F77-B039C3B34C60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43E9C14F-8112-4486-8F77-B039C3B34C60}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43E9C14F-8112-4486-8F77-B039C3B34C60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE32545A-0D6A-43F7-A71C-DF093F695D9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE32545A-0D6A-43F7-A71C-DF093F695D9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE32545A-0D6A-43F7-A71C-DF093F695D9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE32545A-0D6A-43F7-A71C-DF093F695D9C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
